@@ -32,6 +32,28 @@ const Typeometer: React.FC = () => {
     addStats(result);
     setReset(false);
   };
+
+  const onNextButtonClick = () => {
+    setTypingStats(null);
+    setTextEntry(getRandomEntry());
+    setReset(true);
+  };
+
+  const initializeEntries = async () => {
+    await fetchEntries();
+    // If database has no entries
+    if (useTextsStore.getState().entries.length === 0)
+      initializeDefaultEntries();
+    setTextEntry(getRandomEntry());
+  };
+  useEffect(() => {
+    if (!loading) {
+      initializeEntries();
+      setTypingStats(null);
+      setReset(true);
+    }
+  }, [user, loading]);
+
   return (
     textEntry && (
       <>
