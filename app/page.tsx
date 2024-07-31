@@ -15,6 +15,23 @@ import initializeDefaultEntries from "@/lib/initializeDefaultEntries";
 import styles from "./page.module.css";
 
 const Typeometer: React.FC = () => {
+  const [user, loading] = useAuthState(auth);
+  const [textEntry, setTextEntry] = useState<{
+    text: string;
+    source: string;
+  } | null>(null);
+  const [typingStats, setTypingStats] = useState<{
+    speed: number;
+    accuracy: number;
+  } | null>(null);
+  const { addStats } = useStatsStore();
+  const [reset, setReset] = useState<boolean>(false);
+
+  const onTypingCompletion = (result: { speed: number; accuracy: number }) => {
+    setTypingStats(result);
+    addStats(result);
+    setReset(false);
+  };
   return (
     textEntry && (
       <>
